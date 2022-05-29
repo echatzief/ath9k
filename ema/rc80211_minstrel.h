@@ -7,12 +7,7 @@
 #define __RC_MINSTREL_H
 
 #define EWMA_LEVEL	96	/* ewma weighting factor [/EWMA_DIV] */
-#define EWMA_DIV_1	50
-#define EWMA_DIV_2	100
-#define EWMA_DIV_3	128
-#define EWMA_THRESHOLD_1 5
-#define EWMA_THRESHOLD_2 10
-#define EWMA_THRESHOLD_3 15
+#define EWMA_DIV 128
 #define SAMPLE_COLUMNS	10	/* number of columns in sample table */
 
 /* scaled fraction values */
@@ -38,26 +33,16 @@
 #define MINSTREL_AVG_COEFF2		0x00001499
 #define MINSTREL_AVG_COEFF3		-0x0000092e
 
+
 /*
- * Perform EWMA (Exponentially Weighted Moving Average) calculation
+ * Perform EMA (Exponentially Moving Average) calculation
  */
-static inline int minstrel_ewma(int old, int new, int weight)
+static inline int minstrel_ema(int old, int new)
 {
 	int diff, incr;
-	int ewma_div = EWMA_DIV_1;
 
 	diff = new - old;
-
-	// oso pio megali h diafora toso pio ligotero auksanw
-	if(diff > EWMA_THRESHOLD_1){
-		ewma_div = EWMA_DIV_1
-	} else if(diff > EWMA_THRESHOLD_2){
-		ewma_div = EWMA_DIV_2
-	} else if(diff >  EWMA_THRESHOLD_3){
-		ewma_div = EWMA_DIV_3
-	}
-
-	incr = (ewma_div - weight) * diff / ewma_div;
+	incr = (EWMA_DIV) * diff / EWMA_DIV;
 
 	return old + incr;
 }

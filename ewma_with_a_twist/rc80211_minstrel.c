@@ -178,9 +178,7 @@ minstrel_calc_rate_stats(struct minstrel_priv *mp,
 			mrs->prob_avg = cur_prob;
 		} else {
 			/*update exponential weighted moving avarage */
-			mrs->prob_avg = minstrel_ewma(mrs->prob_avg,
-						      cur_prob,
-						      EWMA_LEVEL);
+			mrs->prob_avg = minstrel_cewma(mrs->prob_avg, cur_prob);
 		}
 		mrs->att_hist += mrs->attempts;
 		mrs->succ_hist += mrs->success;
